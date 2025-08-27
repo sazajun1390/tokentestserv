@@ -33,6 +33,9 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
+	// TokenServiceCreateUserTokenProcedure is the fully-qualified name of the TokenService's
+	// CreateUserToken RPC.
+	TokenServiceCreateUserTokenProcedure = "/token.v1.TokenService/CreateUserToken"
 	// TokenServiceGetUserTokenProcedure is the fully-qualified name of the TokenService's GetUserToken
 	// RPC.
 	TokenServiceGetUserTokenProcedure = "/token.v1.TokenService/GetUserToken"
@@ -40,6 +43,8 @@ const (
 
 // TokenServiceClient is a client for the token.v1.TokenService service.
 type TokenServiceClient interface {
+	// ユーザーを作成するRPC
+	CreateUserToken(context.Context, *connect.Request[v1.CreateUserTokenRequest]) (*connect.Response[v1.CreateUserTokenResponse], error)
 	// Tokenを取得するRPC
 	GetUserToken(context.Context, *connect.Request[v1.GetUserTokenRequest]) (*connect.Response[v1.GetUserTokenResponse], error)
 }
@@ -55,6 +60,12 @@ func NewTokenServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 	baseURL = strings.TrimRight(baseURL, "/")
 	tokenServiceMethods := v1.File_token_v1_api_proto.Services().ByName("TokenService").Methods()
 	return &tokenServiceClient{
+		createUserToken: connect.NewClient[v1.CreateUserTokenRequest, v1.CreateUserTokenResponse](
+			httpClient,
+			baseURL+TokenServiceCreateUserTokenProcedure,
+			connect.WithSchema(tokenServiceMethods.ByName("CreateUserToken")),
+			connect.WithClientOptions(opts...),
+		),
 		getUserToken: connect.NewClient[v1.GetUserTokenRequest, v1.GetUserTokenResponse](
 			httpClient,
 			baseURL+TokenServiceGetUserTokenProcedure,
@@ -66,7 +77,13 @@ func NewTokenServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 
 // tokenServiceClient implements TokenServiceClient.
 type tokenServiceClient struct {
-	getUserToken *connect.Client[v1.GetUserTokenRequest, v1.GetUserTokenResponse]
+	createUserToken *connect.Client[v1.CreateUserTokenRequest, v1.CreateUserTokenResponse]
+	getUserToken    *connect.Client[v1.GetUserTokenRequest, v1.GetUserTokenResponse]
+}
+
+// CreateUserToken calls token.v1.TokenService.CreateUserToken.
+func (c *tokenServiceClient) CreateUserToken(ctx context.Context, req *connect.Request[v1.CreateUserTokenRequest]) (*connect.Response[v1.CreateUserTokenResponse], error) {
+	return c.createUserToken.CallUnary(ctx, req)
 }
 
 // GetUserToken calls token.v1.TokenService.GetUserToken.
@@ -76,6 +93,8 @@ func (c *tokenServiceClient) GetUserToken(ctx context.Context, req *connect.Requ
 
 // TokenServiceHandler is an implementation of the token.v1.TokenService service.
 type TokenServiceHandler interface {
+	// ユーザーを作成するRPC
+	CreateUserToken(context.Context, *connect.Request[v1.CreateUserTokenRequest]) (*connect.Response[v1.CreateUserTokenResponse], error)
 	// Tokenを取得するRPC
 	GetUserToken(context.Context, *connect.Request[v1.GetUserTokenRequest]) (*connect.Response[v1.GetUserTokenResponse], error)
 }
@@ -87,6 +106,12 @@ type TokenServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewTokenServiceHandler(svc TokenServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
 	tokenServiceMethods := v1.File_token_v1_api_proto.Services().ByName("TokenService").Methods()
+	tokenServiceCreateUserTokenHandler := connect.NewUnaryHandler(
+		TokenServiceCreateUserTokenProcedure,
+		svc.CreateUserToken,
+		connect.WithSchema(tokenServiceMethods.ByName("CreateUserToken")),
+		connect.WithHandlerOptions(opts...),
+	)
 	tokenServiceGetUserTokenHandler := connect.NewUnaryHandler(
 		TokenServiceGetUserTokenProcedure,
 		svc.GetUserToken,
@@ -95,6 +120,8 @@ func NewTokenServiceHandler(svc TokenServiceHandler, opts ...connect.HandlerOpti
 	)
 	return "/token.v1.TokenService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
+		case TokenServiceCreateUserTokenProcedure:
+			tokenServiceCreateUserTokenHandler.ServeHTTP(w, r)
 		case TokenServiceGetUserTokenProcedure:
 			tokenServiceGetUserTokenHandler.ServeHTTP(w, r)
 		default:
@@ -105,6 +132,10 @@ func NewTokenServiceHandler(svc TokenServiceHandler, opts ...connect.HandlerOpti
 
 // UnimplementedTokenServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedTokenServiceHandler struct{}
+
+func (UnimplementedTokenServiceHandler) CreateUserToken(context.Context, *connect.Request[v1.CreateUserTokenRequest]) (*connect.Response[v1.CreateUserTokenResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("token.v1.TokenService.CreateUserToken is not implemented"))
+}
 
 func (UnimplementedTokenServiceHandler) GetUserToken(context.Context, *connect.Request[v1.GetUserTokenRequest]) (*connect.Response[v1.GetUserTokenResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("token.v1.TokenService.GetUserToken is not implemented"))

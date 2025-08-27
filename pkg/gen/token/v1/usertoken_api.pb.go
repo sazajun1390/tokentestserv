@@ -7,12 +7,12 @@
 package tokenv1
 
 import (
-	_ "github.com/sazajun1390/tokentestserv/pkg/gen/buf/validate"
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
+
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -82,6 +82,52 @@ func (x *CreateUserTokenRequest) GetUserTel() string {
 	return ""
 }
 
+// レスポンステスト用
+type CreateUserTokenResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// UserTokenResorce
+	UserToken     *UserToken `protobuf:"bytes,1,opt,name=user_token,json=userToken,proto3" json:"user_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateUserTokenResponse) Reset() {
+	*x = CreateUserTokenResponse{}
+	mi := &file_token_v1_usertoken_api_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateUserTokenResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateUserTokenResponse) ProtoMessage() {}
+
+func (x *CreateUserTokenResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_token_v1_usertoken_api_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateUserTokenResponse.ProtoReflect.Descriptor instead.
+func (*CreateUserTokenResponse) Descriptor() ([]byte, []int) {
+	return file_token_v1_usertoken_api_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *CreateUserTokenResponse) GetUserToken() *UserToken {
+	if x != nil {
+		return x.UserToken
+	}
+	return nil
+}
+
 // UserTokenリクエストテスト用
 type GetUserTokenRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -95,7 +141,7 @@ type GetUserTokenRequest struct {
 
 func (x *GetUserTokenRequest) Reset() {
 	*x = GetUserTokenRequest{}
-	mi := &file_token_v1_usertoken_api_proto_msgTypes[1]
+	mi := &file_token_v1_usertoken_api_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -107,7 +153,7 @@ func (x *GetUserTokenRequest) String() string {
 func (*GetUserTokenRequest) ProtoMessage() {}
 
 func (x *GetUserTokenRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_token_v1_usertoken_api_proto_msgTypes[1]
+	mi := &file_token_v1_usertoken_api_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -120,7 +166,7 @@ func (x *GetUserTokenRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserTokenRequest.ProtoReflect.Descriptor instead.
 func (*GetUserTokenRequest) Descriptor() ([]byte, []int) {
-	return file_token_v1_usertoken_api_proto_rawDescGZIP(), []int{1}
+	return file_token_v1_usertoken_api_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetUserTokenRequest) GetUserEmail() string {
@@ -148,7 +194,7 @@ type GetUserTokenResponse struct {
 
 func (x *GetUserTokenResponse) Reset() {
 	*x = GetUserTokenResponse{}
-	mi := &file_token_v1_usertoken_api_proto_msgTypes[2]
+	mi := &file_token_v1_usertoken_api_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -160,7 +206,7 @@ func (x *GetUserTokenResponse) String() string {
 func (*GetUserTokenResponse) ProtoMessage() {}
 
 func (x *GetUserTokenResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_token_v1_usertoken_api_proto_msgTypes[2]
+	mi := &file_token_v1_usertoken_api_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -173,7 +219,7 @@ func (x *GetUserTokenResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserTokenResponse.ProtoReflect.Descriptor instead.
 func (*GetUserTokenResponse) Descriptor() ([]byte, []int) {
-	return file_token_v1_usertoken_api_proto_rawDescGZIP(), []int{2}
+	return file_token_v1_usertoken_api_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *GetUserTokenResponse) GetUserToken() *UserToken {
@@ -193,7 +239,10 @@ const file_token_v1_usertoken_api_proto_rawDesc = "" +
 	"user_email\x18\x01 \x01(\tB\a\xbaH\x04r\x02`\x01R\tuserEmail\x12%\n" +
 	"\bpassword\x18\x02 \x01(\tB\t\xbaH\x06r\x04\x10\x01\x18\x14R\bpassword\x12\x1e\n" +
 	"\buser_tel\x18\x03 \x01(\tH\x00R\auserTel\x88\x01\x01B\v\n" +
-	"\t_user_tel\"d\n" +
+	"\t_user_tel\"M\n" +
+	"\x17CreateUserTokenResponse\x122\n" +
+	"\n" +
+	"user_token\x18\x01 \x01(\v2\x13.token.v1.UserTokenR\tuserToken\"d\n" +
 	"\x13GetUserTokenRequest\x12&\n" +
 	"\n" +
 	"user_email\x18\x01 \x01(\tB\a\xbaH\x04r\x02`\x01R\tuserEmail\x12%\n" +
@@ -215,20 +264,22 @@ func file_token_v1_usertoken_api_proto_rawDescGZIP() []byte {
 	return file_token_v1_usertoken_api_proto_rawDescData
 }
 
-var file_token_v1_usertoken_api_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_token_v1_usertoken_api_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_token_v1_usertoken_api_proto_goTypes = []any{
-	(*CreateUserTokenRequest)(nil), // 0: token.v1.CreateUserTokenRequest
-	(*GetUserTokenRequest)(nil),    // 1: token.v1.GetUserTokenRequest
-	(*GetUserTokenResponse)(nil),   // 2: token.v1.GetUserTokenResponse
-	(*UserToken)(nil),              // 3: token.v1.UserToken
+	(*CreateUserTokenRequest)(nil),  // 0: token.v1.CreateUserTokenRequest
+	(*CreateUserTokenResponse)(nil), // 1: token.v1.CreateUserTokenResponse
+	(*GetUserTokenRequest)(nil),     // 2: token.v1.GetUserTokenRequest
+	(*GetUserTokenResponse)(nil),    // 3: token.v1.GetUserTokenResponse
+	(*UserToken)(nil),               // 4: token.v1.UserToken
 }
 var file_token_v1_usertoken_api_proto_depIdxs = []int32{
-	3, // 0: token.v1.GetUserTokenResponse.user_token:type_name -> token.v1.UserToken
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	4, // 0: token.v1.CreateUserTokenResponse.user_token:type_name -> token.v1.UserToken
+	4, // 1: token.v1.GetUserTokenResponse.user_token:type_name -> token.v1.UserToken
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_token_v1_usertoken_api_proto_init() }
@@ -244,7 +295,7 @@ func file_token_v1_usertoken_api_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_token_v1_usertoken_api_proto_rawDesc), len(file_token_v1_usertoken_api_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

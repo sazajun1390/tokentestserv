@@ -145,6 +145,137 @@ var _ interface {
 	ErrorName() string
 } = CreateUserTokenRequestValidationError{}
 
+// Validate checks the field values on CreateUserTokenResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CreateUserTokenResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CreateUserTokenResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CreateUserTokenResponseMultiError, or nil if none found.
+func (m *CreateUserTokenResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateUserTokenResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetUserToken()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreateUserTokenResponseValidationError{
+					field:  "UserToken",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreateUserTokenResponseValidationError{
+					field:  "UserToken",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUserToken()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateUserTokenResponseValidationError{
+				field:  "UserToken",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return CreateUserTokenResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreateUserTokenResponseMultiError is an error wrapping multiple validation
+// errors returned by CreateUserTokenResponse.ValidateAll() if the designated
+// constraints aren't met.
+type CreateUserTokenResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateUserTokenResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateUserTokenResponseMultiError) AllErrors() []error { return m }
+
+// CreateUserTokenResponseValidationError is the validation error returned by
+// CreateUserTokenResponse.Validate if the designated constraints aren't met.
+type CreateUserTokenResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateUserTokenResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateUserTokenResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateUserTokenResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateUserTokenResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateUserTokenResponseValidationError) ErrorName() string {
+	return "CreateUserTokenResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateUserTokenResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateUserTokenResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateUserTokenResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateUserTokenResponseValidationError{}
+
 // Validate checks the field values on GetUserTokenRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.

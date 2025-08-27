@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	TokenService_GetUserToken_FullMethodName = "/token.v1.TokenService/GetUserToken"
+	TokenService_CreateUserToken_FullMethodName = "/token.v1.TokenService/CreateUserToken"
+	TokenService_GetUserToken_FullMethodName    = "/token.v1.TokenService/GetUserToken"
 )
 
 // TokenServiceClient is the client API for TokenService service.
@@ -28,6 +29,8 @@ const (
 //
 // Tokenサービス
 type TokenServiceClient interface {
+	// ユーザーを作成するRPC
+	CreateUserToken(ctx context.Context, in *CreateUserTokenRequest, opts ...grpc.CallOption) (*CreateUserTokenResponse, error)
 	// Tokenを取得するRPC
 	GetUserToken(ctx context.Context, in *GetUserTokenRequest, opts ...grpc.CallOption) (*GetUserTokenResponse, error)
 }
@@ -38,6 +41,16 @@ type tokenServiceClient struct {
 
 func NewTokenServiceClient(cc grpc.ClientConnInterface) TokenServiceClient {
 	return &tokenServiceClient{cc}
+}
+
+func (c *tokenServiceClient) CreateUserToken(ctx context.Context, in *CreateUserTokenRequest, opts ...grpc.CallOption) (*CreateUserTokenResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateUserTokenResponse)
+	err := c.cc.Invoke(ctx, TokenService_CreateUserToken_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *tokenServiceClient) GetUserToken(ctx context.Context, in *GetUserTokenRequest, opts ...grpc.CallOption) (*GetUserTokenResponse, error) {
@@ -56,6 +69,8 @@ func (c *tokenServiceClient) GetUserToken(ctx context.Context, in *GetUserTokenR
 //
 // Tokenサービス
 type TokenServiceServer interface {
+	// ユーザーを作成するRPC
+	CreateUserToken(context.Context, *CreateUserTokenRequest) (*CreateUserTokenResponse, error)
 	// Tokenを取得するRPC
 	GetUserToken(context.Context, *GetUserTokenRequest) (*GetUserTokenResponse, error)
 	mustEmbedUnimplementedTokenServiceServer()
@@ -68,6 +83,9 @@ type TokenServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedTokenServiceServer struct{}
 
+func (UnimplementedTokenServiceServer) CreateUserToken(context.Context, *CreateUserTokenRequest) (*CreateUserTokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateUserToken not implemented")
+}
 func (UnimplementedTokenServiceServer) GetUserToken(context.Context, *GetUserTokenRequest) (*GetUserTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserToken not implemented")
 }
@@ -90,6 +108,24 @@ func RegisterTokenServiceServer(s grpc.ServiceRegistrar, srv TokenServiceServer)
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&TokenService_ServiceDesc, srv)
+}
+
+func _TokenService_CreateUserToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateUserTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TokenServiceServer).CreateUserToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TokenService_CreateUserToken_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TokenServiceServer).CreateUserToken(ctx, req.(*CreateUserTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _TokenService_GetUserToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -117,6 +153,10 @@ var TokenService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "token.v1.TokenService",
 	HandlerType: (*TokenServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CreateUserToken",
+			Handler:    _TokenService_CreateUserToken_Handler,
+		},
 		{
 			MethodName: "GetUserToken",
 			Handler:    _TokenService_GetUserToken_Handler,

@@ -24,20 +24,25 @@ var File_token_v1_api_proto protoreflect.FileDescriptor
 
 const file_token_v1_api_proto_rawDesc = "" +
 	"\n" +
-	"\x12token/v1/api.proto\x12\btoken.v1\x1a\x1ctoken/v1/usertoken_api.proto2]\n" +
-	"\fTokenService\x12M\n" +
+	"\x12token/v1/api.proto\x12\btoken.v1\x1a\x1ctoken/v1/usertoken_api.proto2\xb5\x01\n" +
+	"\fTokenService\x12V\n" +
+	"\x0fCreateUserToken\x12 .token.v1.CreateUserTokenRequest\x1a!.token.v1.CreateUserTokenResponse\x12M\n" +
 	"\fGetUserToken\x12\x1d.token.v1.GetUserTokenRequest\x1a\x1e.token.v1.GetUserTokenResponseB\x98\x01\n" +
 	"\fcom.token.v1B\bApiProtoP\x01Z=github.com/sazajun1390/tokentestserv/pkg/gen/token/v1;tokenv1\xa2\x02\x03TXX\xaa\x02\bToken.V1\xca\x02\bToken\\V1\xe2\x02\x14Token\\V1\\GPBMetadata\xea\x02\tToken::V1b\x06proto3"
 
 var file_token_v1_api_proto_goTypes = []any{
-	(*GetUserTokenRequest)(nil),  // 0: token.v1.GetUserTokenRequest
-	(*GetUserTokenResponse)(nil), // 1: token.v1.GetUserTokenResponse
+	(*CreateUserTokenRequest)(nil),  // 0: token.v1.CreateUserTokenRequest
+	(*GetUserTokenRequest)(nil),     // 1: token.v1.GetUserTokenRequest
+	(*CreateUserTokenResponse)(nil), // 2: token.v1.CreateUserTokenResponse
+	(*GetUserTokenResponse)(nil),    // 3: token.v1.GetUserTokenResponse
 }
 var file_token_v1_api_proto_depIdxs = []int32{
-	0, // 0: token.v1.TokenService.GetUserToken:input_type -> token.v1.GetUserTokenRequest
-	1, // 1: token.v1.TokenService.GetUserToken:output_type -> token.v1.GetUserTokenResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	0, // 0: token.v1.TokenService.CreateUserToken:input_type -> token.v1.CreateUserTokenRequest
+	1, // 1: token.v1.TokenService.GetUserToken:input_type -> token.v1.GetUserTokenRequest
+	2, // 2: token.v1.TokenService.CreateUserToken:output_type -> token.v1.CreateUserTokenResponse
+	3, // 3: token.v1.TokenService.GetUserToken:output_type -> token.v1.GetUserTokenResponse
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
